@@ -1,0 +1,39 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.pyo
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Environment files
+.env
+.venv/
+venv/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Output files
+*.csv
+*.tsv
+*.log
+*.sqlite3
+*.db
+*.bak
+*.tar
+*.zip
+
+# Local data
+product.json
+
+# VSCode and PyCharm settings
+.vscode/
+.idea/
+
+# Pytest cache
+.pytest_cache/
