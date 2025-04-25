@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 from typing import Any, Dict, Callable
-from utils.translations import  translate_lang
+from utils.translations import  translate_lang , translate_cop_to_mxn
 from utils.return_declarations import produces , consumes
 from schemas.responses import Link, ProduceType , ConsumeType
 
@@ -142,7 +142,16 @@ def prueba_2():
     graphql_params = template["params"]
 
     response = session.get(graphql_url, params=graphql_params).json()
-    return extended_jsonify({"data": [response]})
+
+    response_data = []
+    for product in response["data"]["products"]:
+        product_summary =  {
+                "product_name": product["linkText"],
+                "price"       : translate_cop_to_mxn(product["priceRange"]["sellingPrice"]["highPrice"])
+            }
+        response_data.append(product_summary)
+
+    return extended_jsonify({"data": response_data})
 
 if __name__ == '__main__':
     app.run(debug=True)
