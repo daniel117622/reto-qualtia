@@ -125,6 +125,7 @@ def prueba_1():
 @produces("JSON")
 @consumes("application/json")
 def prueba_2():
+    # Esto es común para cualquier petición
     store_url = "https://www.jumbocolombia.com/api/segments"
     session = requests.Session()
 
@@ -135,23 +136,11 @@ def prueba_2():
     }
 
     session.get(store_url)
-    cookies_dict = {cookie.name: cookie.value for cookie in session.cookies}
 
-    template       = GraphQLTemplate.ObtenerAceites.value
-    graphql_url    = template["graphql_url"]
-    graphql_params = template["params"]
+    # Es necesario evaluar que zona scrapear. Solo para usar el template.
 
-    response = session.get(graphql_url, params=graphql_params).json()
+    # Esto se realizará con un servicio de SELENIUM + REDIS
 
-    response_data = []
-    for product in response["data"]["products"]:
-        product_summary =  {
-                "product_name": product["linkText"],
-                "price"       : translate_cop_to_mxn(product["priceRange"]["sellingPrice"]["highPrice"])
-            }
-        response_data.append(product_summary)
-
-    return extended_jsonify({"data": response_data})
-
+    return extended_jsonify({"data" : []})
 if __name__ == '__main__':
     app.run(debug=True)
