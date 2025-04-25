@@ -11,19 +11,19 @@ from schemas.responses import Link, ProduceType , ConsumeType
 
 def extended_jsonify(data: Dict[str, Any]) -> Any:
     index_data = index().get_json()
-    if request.args.get("json", "false").lower() == "true":
-        if isinstance(data, dict):
-            return jsonify({
-                **data,
-                "links": index_data.get("links", [])
-            })
-        elif isinstance(data, list):
-            return jsonify({
-                "data": data,
-                "links": index_data.get("links", [])
-            })
-        else:
-            raise TypeError("extended_jsonify only supports dict or list types")
+    
+    if isinstance(data, dict):
+        return jsonify({
+            **data,
+            "links": index_data.get("links", [])
+        })
+    elif isinstance(data, list):
+        return jsonify({
+            "data": data,
+            "links": index_data.get("links", [])
+        })
+    else:
+        raise TypeError("extended_jsonify only supports dict or list types")
     return jsonify(data)
 
 app = Flask(__name__)
@@ -48,7 +48,7 @@ def index():
         view_func = app.view_functions.get(rule.endpoint)
 
         produces = [ProduceType(rt) for rt in getattr(view_func, '_produce_type', [])]
-        consumes = [ConsumeType(ct) for ct in getattr(view_func, '_consume_type', [])]
+        consumes = [ConsumeType(ct) for ct in getattr(view_func, '_consume', [])]
 
         allowed_methods = sorted(rule.methods & {"GET", "POST", "PUT", "DELETE", "PATCH"})
 
@@ -59,8 +59,10 @@ def index():
             consumes = consumes
         ))
 
+    sorted_links = sorted(links, key=lambda l: l.path)
+
     return jsonify({
-        "links": [link.as_dict() for link in links]
+        "links": [link.as_dict() for link in sorted_links]
     })
 
 
@@ -118,8 +120,9 @@ def prueba_1():
 
 @app.route('/prueba-2', methods=['GET'])
 @produces("JSON")
+@consumes("application/json")
 def prueba_2():
-    return extended_jsonify([])
+    return extended_jsonify({"data": [{}]})
 
 if __name__ == '__main__':
     app.run(debug=True)

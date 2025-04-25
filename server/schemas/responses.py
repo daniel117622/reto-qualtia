@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import List, Literal
 
@@ -54,9 +55,9 @@ class Link:
 
 
     def as_dict(self):
-        return {
-            "path"     : self.path,
-            "methods"  : self.methods,
-            "produces" : [str(r) for r in self.produces],
-            "consumes" : [str(c) for c in self.consumes]
-        }
+        return OrderedDict([
+            ("path", self.path),
+            ("methods", self.methods),
+            ("produces", [str(r) for r in self.produces]),
+            ("consumes", [str(c) for c in self.consumes])
+        ])
