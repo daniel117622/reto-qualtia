@@ -9,6 +9,9 @@ from utils.translations import  translate_lang
 from utils.return_declarations import produces , consumes
 from schemas.responses import Link, ProduceType , ConsumeType
 
+from graphql_templates.templates import GraphQLTemplate
+
+
 def extended_jsonify(data: Dict[str, Any]) -> Any:
     index_data = index().get_json()
     
@@ -122,7 +125,24 @@ def prueba_1():
 @produces("JSON")
 @consumes("application/json")
 def prueba_2():
-    return extended_jsonify({"data": [{}]})
+    store_url = "https://www.jumbocolombia.com/api/segments"
+    session = requests.Session()
+
+    session.headers = {
+        "User-Agent"     : "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept"         : "*/*",
+        "Accept-Language": "es-CO,es;q=0.9",
+    }
+
+    session.get(store_url)
+    cookies_dict = {cookie.name: cookie.value for cookie in session.cookies}
+
+    template       = GraphQLTemplate.ObtenerAceites.value
+    graphql_url    = template["graphql_url"]
+    graphql_params = template["params"]
+
+    response = session.get(graphql_url, params=graphql_params).json()
+    return extended_jsonify({"data": [response]})
 
 if __name__ == '__main__':
     app.run(debug=True)
