@@ -8,9 +8,17 @@ services:
       - "6379:6379"
 
   selenium:
-    build: ./selenium-service
+    image: selenium/standalone-chrome:latest
     container_name: selenium-service
+    ports:
+      - "4444:4444"
+    shm_size: 2g
+
+  worker:
+    build: ./selenium-worker
+    container_name: selenium-worker
     depends_on:
+      - selenium
       - redis-service
 
   server:
