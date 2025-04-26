@@ -16,17 +16,19 @@ pages = {
     "aceite"     : "https://www.tiendasjumbo.co/supermercado/despensa/aceite"
 }
 
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
+def create_driver():
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    return webdriver.Remote(
+        command_executor='http://selenium:4444/wd/hub',
+        options=options
+    )
 
-driver = webdriver.Remote(
-    command_executor='http://selenium:4444/wd/hub',
-    options=options
-)
+def fetch_and_store():
+    driver = create_driver()
 
-def fetch_and_store(driver):
     for key, url in pages.items():
         try:
             driver.get(url)
@@ -63,11 +65,15 @@ def fetch_and_store(driver):
         except Exception as e:
             print(f"[ERROR] Failed to fetch {url}: {e}")
 
+    # Close the driver after scraping
+    driver.quit()
+
+
 try:
     while True:
-        fetch_and_store(driver)
-        time.sleep(10)  
+        fetch_and_store()
+        time.sleep(10) 
 except Exception as e:
     print(f"[FATAL ERROR] {e}")
-finally:
-    driver.quit()
+    
+
