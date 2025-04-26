@@ -10,7 +10,6 @@ from utils.translations import  translate_lang , translate_cop_to_mxn
 from utils.return_declarations import produces , consumes
 from schemas.responses import Link, ProduceType , ConsumeType
 
-from graphql_templates.templates import GraphQLTemplate
 
 import redis
 r = redis.Redis(host='redis-service', port=6379, decode_responses=True)

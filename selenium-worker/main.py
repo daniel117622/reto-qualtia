@@ -31,9 +31,9 @@ def fetch_and_store(driver):
         try:
             driver.get(url)
 
-            time.sleep(3)  
+            time.sleep(10)  
             driver.execute_script("window.scrollBy(0, window.innerHeight);")
-            time.sleep(3)
+            time.sleep(10)
 
             page_source = driver.page_source
             
