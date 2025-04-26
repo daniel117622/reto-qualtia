@@ -31,7 +31,12 @@ def fetch_and_store(driver):
         try:
             driver.get(url)
 
-            time.sleep(10)  
+            time.sleep(5)  
+            
+            # First scroll
+            driver.execute_script("window.scrollBy(0, window.innerHeight);")
+            time.sleep(10)
+            # Second scroll
             driver.execute_script("window.scrollBy(0, window.innerHeight);")
             time.sleep(10)
 
@@ -60,7 +65,7 @@ def fetch_and_store(driver):
 try:
     while True:
         fetch_and_store(driver)
-        time.sleep(30)  
+        time.sleep(10)  
 except Exception as e:
     print(f"[FATAL ERROR] {e}")
 finally:
