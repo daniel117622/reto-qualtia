@@ -55,7 +55,7 @@ def index():
         view_func = app.view_functions.get(rule.endpoint)
 
         produces = [ProduceType(rt) for rt in getattr(view_func, '_produce_type', [])]
-        consumes = [ConsumeType(ct) for ct in getattr(view_func, '_consume', [])]
+        consumes = [ConsumeType(ct) for ct in getattr(view_func, '_consume_type', [])]
 
         allowed_methods = sorted(rule.methods & {"GET", "POST", "PUT", "DELETE", "PATCH"})
 
