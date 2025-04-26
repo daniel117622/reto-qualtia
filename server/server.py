@@ -135,9 +135,9 @@ def prueba_2():
     hostname   = parsed_url.hostname or ""
     path       = parsed_url.path.lower()
 
-    if "jumbocolombia.com" not in hostname:
+    if "jumbocolombia" not in hostname and "tiendasjumbo" not in hostname:
         return extended_jsonify({
-            "error": "Invalid domain, only jumbocolombia.com is supported"
+            "error": "Invalid domain, only jumbocolombia.com or tiendasjumbo.com is supported"
         }), 400
 
     keywords = ["enlatados", "harinas", "chocolates", "aceite"]

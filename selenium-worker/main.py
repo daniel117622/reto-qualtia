@@ -33,12 +33,13 @@ def fetch_and_store(driver):
 
             time.sleep(5)  
             
-            # First scroll
+            # Intente utilizar EC.wait, pero crasheaba el driver. Por cuestiones de tiempo para la prueba opté por
+            # utilizar time.sleep aunque se que no es lo ideal
             driver.execute_script("window.scrollBy(0, window.innerHeight);")
-            time.sleep(10)
+            time.sleep(5)
             # Second scroll
             driver.execute_script("window.scrollBy(0, window.innerHeight);")
-            time.sleep(10)
+            time.sleep(5)
 
             page_source = driver.page_source
             
