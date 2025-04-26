@@ -13,13 +13,20 @@ services:
     ports:
       - "4444:4444"
     shm_size: 2g
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   worker:
     build: ./selenium-worker
     container_name: selenium-worker
     depends_on:
-      - selenium
-      - redis-service
+      selenium:
+        condition: service_healthy
+      redis-service:
+        condition: service_started
 
   server:
     build: ./server
