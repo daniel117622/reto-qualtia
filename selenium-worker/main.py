@@ -59,7 +59,14 @@ def fetch_and_store():
                 print(f"[INFO] Stored brand names list for {key}: {brand_names}")
                 print(f"[INFO] Stored timestamp for {key}: {timestamp}")
             else:
-                r.set(key, "no element")
+                r.delete(key)
+                r.rpush(key, "no element")
+
+                timestamp = int(time.time())  # Current UNIX timestamp
+                r.set(f"{key}:timestamp", timestamp)
+
+                print(f"[INFO] Stored 'no element' placeholder for {key}")
+                print(f"[INFO] Stored timestamp for {key}: {timestamp}")
 
 
         except Exception as e:
